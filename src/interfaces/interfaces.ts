@@ -41,4 +41,5 @@ export interface IBackDropOptions {
 
 export interface IBackDrop {
   show(elements: NodeList): void;
+  hide(): void;
 }

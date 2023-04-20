@@ -4,6 +4,7 @@ import BackDropContext from './BackDropContext';
 import { isVisible } from './utils/isVisible';
 import { CloseTypes } from './interfaces/enums';
 
+// TODO add params validation
 const defaultOptions: Partial<IBackDropParams> = {
   offset: 3,
   close: CloseTypes.ALWAYS,
@@ -66,12 +67,12 @@ class HighlightOverlay implements IBackDrop {
       case CloseTypes.NONE:
         return;
       case CloseTypes.ALWAYS:
-        return this.close();
+        return this.hide();
       case CloseTypes.BACKDROP:
         const alpha = this.#context.getCtx().getImageData(event.clientX, event.clientY, 1, 1).data[3];
 
         if (alpha !== 0) {
-          this.close();
+          this.hide();
         }
 
         return;
@@ -114,7 +115,7 @@ class HighlightOverlay implements IBackDrop {
     this.#mouseHandler.mount();
   }
 
-  close() {
+  hide() {
     this.#context.hide();
 
     this.#mouseHandler.unmount();
