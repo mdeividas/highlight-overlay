@@ -13,6 +13,10 @@
     "highlight",
     "overlay"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mdeividas/highlight-overlay.git"
+  },
   "author": "Deividas Maciejauskas",
   "license": "ISC",
   "devDependencies": {
