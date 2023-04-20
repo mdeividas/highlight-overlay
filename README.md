@@ -10,3 +10,5 @@ Add lib description:
 - [ ] Add support for resize screen
 - [ ] Clear cursor position after losing screen view port
 - [ ] Add backdrop animation
+- [ ] Add documentation
+- [ ] Add license
