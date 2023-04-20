@@ -1,15 +1,29 @@
 {
   "name": "highlight-overlay",
-  "version": "1.0.0",
+  "version": "0.1.13",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json"
   },
   "keywords": [
     "highlight",
     "overlay"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mdeividas/highlight-overlay.git"
+  },
   "author": "Deividas Maciejauskas",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^2.8.7",
+    "tslint": "^6.1.3",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^5.0.4"
+  },
+  "files": ["lib/**/*"]
 }
