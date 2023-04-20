@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "es2021",
+    "jsx": "react",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "removeComments": true,
+    "strictNullChecks": false,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "isolatedModules": false,
+    "strict": true,
+    "lib": ["es6", "dom", "es2021"],
+    "outDir": "./lib"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "**/__tests__/*"]
+}
