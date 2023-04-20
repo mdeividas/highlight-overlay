@@ -1,11 +1,12 @@
-import { IBackDropParams, IBackDropContext, IBackDrop, IMouseHandler } from './interfaces';
+import { IBackDrop, IBackDropContext, IBackDropParams, IMouseHandler } from './interfaces/interfaces';
 import MouseHandler from './MouseHandler';
 import BackDropContext from './BackDropContext';
 import { isVisible } from './utils/isVisible';
+import { CloseTypes } from './interfaces/enums';
 
 const defaultOptions: Partial<IBackDropParams> = {
   offset: 3,
-  close: 'always',
+  close: CloseTypes.ALWAYS,
   backDropColor: [0, 0, 0, 0.3],
   cursor: {
     enabled: false,
@@ -13,7 +14,7 @@ const defaultOptions: Partial<IBackDropParams> = {
   },
 };
 
-class BackDrop implements IBackDrop {
+class HighlightOverlay implements IBackDrop {
   #context: IBackDropContext;
   #elements: DOMRect[];
   #params: IBackDropParams;
@@ -61,14 +62,19 @@ class BackDrop implements IBackDrop {
   }
 
   #handleClick(event: MouseEvent) {
-    if (this.#params.close === 'onBackDrop') {
-      const alpha = this.#context.getCtx().getImageData(event.clientX, event.clientY, 1, 1).data[3];
+    switch (this.#params.close) {
+      case CloseTypes.NONE:
+        return;
+      case CloseTypes.ALWAYS:
+        return this.close();
+      case CloseTypes.BACKDROP:
+        const alpha = this.#context.getCtx().getImageData(event.clientX, event.clientY, 1, 1).data[3];
 
-      if (alpha !== 0) {
-        this.close();
-      }
-    } else {
-      this.close();
+        if (alpha !== 0) {
+          this.close();
+        }
+
+        return;
     }
   }
 
@@ -115,4 +121,4 @@ class BackDrop implements IBackDrop {
   }
 }
 
-export default BackDrop;
+export default HighlightOverlay;

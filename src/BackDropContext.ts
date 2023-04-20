@@ -1,4 +1,4 @@
-import { IBackDropContext } from './interfaces';
+import { IBackDropContext } from './interfaces/interfaces';
 
 class BackDropContext implements IBackDropContext {
   #canvas: HTMLCanvasElement;

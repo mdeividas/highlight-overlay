@@ -11,7 +11,7 @@ const getScrollableElement = (element: Element, iteration = 0): Element => {
 };
 
 export const isVisible = (element: Element, bounds: DOMRect) => {
-  const scrollableElement = getScrollableElement(element as Element);
+  const scrollableElement = getScrollableElement(element as Element) || (element.parentNode as Element);
 
   const parentBounds = scrollableElement.getBoundingClientRect();
 

@@ -1,1 +1,3 @@
-export { default } from './BackDrop';
+export { default } from './HighlightOverlay';
+
+export { CloseTypes } from './interfaces/enums';

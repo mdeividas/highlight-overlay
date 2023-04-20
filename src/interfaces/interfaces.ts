@@ -1,3 +1,5 @@
+import { CloseTypes } from './enums';
+
 export interface IBackDropContext {
   getCtx(): CanvasRenderingContext2D;
   getWidth(): number;
@@ -21,7 +23,7 @@ export interface IMouseHandler {
 
 export interface IBackDropParams {
   offset?: number;
-  close?: 'always' | 'onBackDrop';
+  close?: CloseTypes;
   backDropColor?: number[];
   cursor?: {
     enabled?: boolean;

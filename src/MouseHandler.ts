@@ -1,4 +1,4 @@
-import { IMouseHandler, IMouseParams } from './interfaces';
+import { IMouseHandler, IMouseParams } from './interfaces/interfaces';
 
 // TODo handle mouse leaving the area
 class MouseHandler implements IMouseHandler {
