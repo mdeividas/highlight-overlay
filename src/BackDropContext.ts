@@ -13,7 +13,11 @@ class BackDropContext implements IBackDropContext {
     this.#canvas = document.createElement('canvas');
     this.#canvas.id = this.#id;
     this.#canvas.width = window.innerWidth;
-    this.#canvas.height = window.innerHeight;
+    this.#canvas.height = Math.max(
+      window.innerHeight,
+      document.body.scrollHeight,
+      document.documentElement?.scrollHeight,
+    );
     this.#canvas.style.position = 'absolute';
     this.#canvas.style.top = '0';
     this.#canvas.style.left = '0';

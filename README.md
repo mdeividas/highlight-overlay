@@ -1,6 +1,15 @@
 # Highlight Overlay
 This is a tiny vanilla JavaScript library that can be used to apply overlays with highlighted areas on web pages. It is not tied to any particular framework and can be easily integrated into any framework.
 
+## Showcases
+### As flexible as you need
+![Alt As flexible as you need](./examples/example_1.jpeg)
+![Alt As flexible as you need](./examples/example_2.jpeg)
+![Alt As flexible as you need](./examples/example_3.jpeg)
+
+### Apply to any html element
+![Alt show case with table elements](./examples/example_4.jpeg)
+
 ## Usage
 ```
 // Create an instance of overlay
@@ -57,7 +66,6 @@ highlightOverlay.hide();
 |      |   ALWAYS    | Closes overlay on any click                                   |
 |      |   NONE    | Ignores any click and persists overlay till is closed manually |
 
-## Add example showcases 
 
 ### Todos
 - [ ] Add support for resize screen
