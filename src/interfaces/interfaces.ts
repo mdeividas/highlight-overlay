@@ -25,6 +25,7 @@ export interface IBackDropParams {
   offset?: number;
   close?: CloseTypes;
   backDropColor?: number[];
+  duration?: number;
   cursor?: {
     enabled?: boolean;
     size?: number;

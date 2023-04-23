@@ -2,13 +2,10 @@
 This is a tiny vanilla JavaScript library that can be used to apply overlays with highlighted areas on web pages. It is not tied to any particular framework and can be easily integrated into any framework.
 
 ## Showcases
-### As flexible as you need
-![Alt As flexible as you need](./examples/example_1.jpeg)
-![Alt As flexible as you need](./examples/example_2.jpeg)
-![Alt As flexible as you need](./examples/example_3.jpeg)
-
-### Apply to any html element
-![Alt show case with table elements](./examples/example_4.jpeg)
+|As flexible as you need                         |               Available on any html element               |
+|:---------------------------------------------------------:|:---------------------------------------------------------:|
+ | ![Alt As flexible as you need](./examples/example_1.jpeg) | ![Alt As flexible as you need](./examples/example_2.jpeg) |
+ | ![Alt As flexible as you need](./examples/example_3.jpeg) | ![Alt As flexible as you need](./examples/example_4.jpeg) |
 
 ## Usage
 ```
@@ -51,13 +48,14 @@ highlightOverlay.hide();
 
 
 ## Parameters
-| Name           | Default value     | Type       | Description                                            |
-|----------------|-------------------|------------|--------------------------------------------------------|
-| offset         | 3                 | number     | Defines transparent area's offset size.                |
+| Name           | Default value     | Type     | Description                                            |
+|----------------|-------------------|----------|--------------------------------------------------------|
+| offset         | 3                 | number   | Defines transparent area's offset size.                |
 | close          | CloseTypes.ALWAYS | CloseTypes | Defines closing logic behavior.                        |
-| backDropColor  | [0, 0, 0, 0.3]    | number[]   | Defines overlay color. Is required to use rgba format. |
-| cursor.enabled | false             | boolean    | Enables cursor highlight.                              |
-| cursor.size    | 15                | number     | Defines radius size of cursor highlight.               |
+| backDropColor  | [0, 0, 0, 0.3]    | number[] | Defines overlay color. Is required to use rgba format. |
+| duration       | 100               | number   | Defines overlay animation duration in MS.              |
+| cursor.enabled | false             | boolean  | Enables cursor highlight.                              |
+| cursor.size    | 15                | number   | Defines radius size of cursor highlight.               |
 
 ### Enums 
 | Name | Value | Description                                                   |

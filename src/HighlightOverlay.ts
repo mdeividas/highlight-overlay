@@ -7,8 +7,9 @@ import { CloseTypes } from './interfaces/enums';
 // TODO add params validation
 const defaultOptions: Partial<IBackDropParams> = {
   offset: 3,
+  duration: 100,
   close: CloseTypes.ALWAYS,
-  backDropColor: [0, 0, 0, 0.3],
+  backDropColor: [0, 0, 0, 0.3], // RGBA
   cursor: {
     enabled: false,
     size: 15,
@@ -21,6 +22,33 @@ class HighlightOverlay implements IBackDrop {
   #params: IBackDropParams;
   #cursor: { x: number; y: number };
   #mouseHandler: IMouseHandler;
+  #lastTime: number;
+  #timer: number;
+  #animation: number;
+  #backdropColor: number[];
+  #backdropIncrement: number[];
+
+  static FRAME_INTERVAL = 1000 / 60;
+
+  #isAnimated() {
+    return this.#backdropColor.every((value, index) => value >= this.#params.backDropColor[index]);
+  }
+
+  #calculateBackdropIncrement() {
+    const numberOfIterations = this.#params.duration / HighlightOverlay.FRAME_INTERVAL;
+
+    return this.#params.backDropColor.map((value) => value / numberOfIterations);
+  }
+
+  #increaseBackdropValues() {
+    return this.#backdropColor.map((value, index) => {
+      if (value < this.#params.backDropColor[index]) {
+        return value + this.#backdropIncrement[index];
+      }
+
+      return value;
+    });
+  }
 
   // TODO add animation to backdrop
   #draw() {
@@ -33,7 +61,7 @@ class HighlightOverlay implements IBackDrop {
 
     ctx.beginPath();
     // Set fill style for fillRect
-    ctx.fillStyle = `rgba(${this.#params.backDropColor.toString()})`;
+    ctx.fillStyle = `rgba(${this.#backdropColor.toString()})`;
     // Reset to default globalCompositeOperation
     ctx.globalCompositeOperation = 'source-over';
     // Set background for whole canvas
@@ -79,17 +107,46 @@ class HighlightOverlay implements IBackDrop {
     }
   }
 
+  #animate(timestamp = 0) {
+    const deltaTime = timestamp - this.#lastTime;
+
+    if (this.#isAnimated()) {
+      cancelAnimationFrame(this.#animation);
+    }
+
+    if (this.#timer > HighlightOverlay.FRAME_INTERVAL) {
+      this.#draw();
+
+      this.#backdropColor = this.#increaseBackdropValues();
+
+      this.#timer = 0;
+    } else {
+      this.#timer += deltaTime;
+    }
+
+    this.#lastTime = timestamp;
+    this.#animation = requestAnimationFrame(this.#animate.bind(this));
+  }
+
   constructor(params?: IBackDropParams) {
     this.#context = new BackDropContext();
     this.#params = { ...defaultOptions, ...params, cursor: { ...defaultOptions.cursor, ...params?.cursor } };
     this.#elements = [];
     this.#cursor = { x: 0, y: 0 };
+    this.#timer = 0;
+    this.#lastTime = 0;
+    this.#backdropColor = [0, 0, 0, 0];
+    this.#backdropIncrement = [];
 
     this.#mouseHandler = new MouseHandler({
       cursorMonitoring: this.#params.cursor.enabled,
       onMove: this.#updateCursor.bind(this),
       onClick: this.#handleClick.bind(this),
     });
+
+    this.#backdropIncrement = this.#calculateBackdropIncrement();
+
+    console.log(this.#backdropIncrement);
   }
 
   show(elements: NodeList) {
@@ -111,7 +168,7 @@ class HighlightOverlay implements IBackDrop {
     }
 
     this.#context.show();
-    this.#draw();
+    this.#animate();
     this.#mouseHandler.mount();
   }
 
@@ -119,6 +176,10 @@ class HighlightOverlay implements IBackDrop {
     this.#context.hide();
 
     this.#mouseHandler.unmount();
+
+    this.#backdropColor = [0, 0, 0, 0];
+
+    cancelAnimationFrame(this.#animation);
   }
 }
 
