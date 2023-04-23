@@ -18,7 +18,8 @@ const defaultOptions: Partial<IBackDropParams> = {
 
 class HighlightOverlay implements IBackDrop {
   #context: IBackDropContext;
-  #elements: DOMRect[];
+  #elementsBounds: DOMRect[];
+  #elements: NodeList;
   #params: IBackDropParams;
   #cursor: { x: number; y: number };
   #mouseHandler: IMouseHandler;
@@ -27,6 +28,7 @@ class HighlightOverlay implements IBackDrop {
   #animation: number;
   #backdropColor: number[];
   #backdropIncrement: number[];
+  #isVisible: boolean;
 
   static FRAME_INTERVAL = 1000 / 60;
 
@@ -50,7 +52,6 @@ class HighlightOverlay implements IBackDrop {
     });
   }
 
-  // TODO add animation to backdrop
   #draw() {
     const ctx = this.#context.getCtx();
     const width = this.#context.getWidth();
@@ -71,7 +72,7 @@ class HighlightOverlay implements IBackDrop {
     // draw arc
     ctx.fillStyle = 'black';
 
-    this.#elements.forEach((element) => {
+    this.#elementsBounds.forEach((element) => {
       ctx.fillRect(element.x, element.y, element.width, element.height);
     });
 
@@ -91,6 +92,10 @@ class HighlightOverlay implements IBackDrop {
   }
 
   #handleClick(event: MouseEvent) {
+    if (!this.#isVisible) {
+      return;
+    }
+
     switch (this.#params.close) {
       case CloseTypes.NONE:
         return;
@@ -111,6 +116,7 @@ class HighlightOverlay implements IBackDrop {
     const deltaTime = timestamp - this.#lastTime;
 
     if (this.#isAnimated()) {
+      this.#isVisible = true;
       cancelAnimationFrame(this.#animation);
     }
 
@@ -128,36 +134,13 @@ class HighlightOverlay implements IBackDrop {
     this.#animation = requestAnimationFrame(this.#animate.bind(this));
   }
 
-  constructor(params?: IBackDropParams) {
-    this.#context = new BackDropContext();
-    this.#params = { ...defaultOptions, ...params, cursor: { ...defaultOptions.cursor, ...params?.cursor } };
-    this.#elements = [];
-    this.#cursor = { x: 0, y: 0 };
-    this.#timer = 0;
-    this.#lastTime = 0;
-    this.#backdropColor = [0, 0, 0, 0];
-    this.#backdropIncrement = [];
-
-    this.#mouseHandler = new MouseHandler({
-      cursorMonitoring: this.#params.cursor.enabled,
-      onMove: this.#updateCursor.bind(this),
-      onClick: this.#handleClick.bind(this),
-    });
-
-    this.#backdropIncrement = this.#calculateBackdropIncrement();
-
-    console.log(this.#backdropIncrement);
-  }
-
-  show(elements: NodeList) {
-    this.#elements = [];
-
-    for (let i = 0; i < elements.length; i++) {
-      const element = elements[i] as Element;
+  #calculateBounds() {
+    for (let i = 0; i < this.#elements.length; i++) {
+      const element = this.#elements[i] as Element;
       const rect = element.getBoundingClientRect();
 
       if (isVisible(element, rect)) {
-        this.#elements.push({
+        this.#elementsBounds.push({
           ...rect,
           x: rect.x - this.#params.offset,
           y: rect.y - this.#params.offset,
@@ -166,6 +149,39 @@ class HighlightOverlay implements IBackDrop {
         });
       }
     }
+  }
+
+  #onResize() {
+    this.#elementsBounds = [];
+
+    this.#calculateBounds();
+
+    this.#draw();
+  }
+
+  constructor(params?: IBackDropParams) {
+    this.#context = new BackDropContext(this.#onResize.bind(this));
+    this.#params = { ...defaultOptions, ...params, cursor: { ...defaultOptions.cursor, ...params?.cursor } };
+    this.#elementsBounds = [];
+    this.#cursor = { x: 0, y: 0 };
+    this.#timer = 0;
+    this.#lastTime = 0;
+    this.#backdropColor = [0, 0, 0, 0];
+    this.#backdropIncrement = [];
+    this.#mouseHandler = new MouseHandler({
+      cursorMonitoring: this.#params.cursor.enabled,
+      onMove: this.#updateCursor.bind(this),
+      onClick: this.#handleClick.bind(this),
+    });
+    this.#isVisible = false;
+    this.#backdropIncrement = this.#calculateBackdropIncrement();
+  }
+
+  show(elements: NodeList) {
+    this.#elements = elements;
+    this.#elementsBounds = [];
+
+    this.#calculateBounds();
 
     this.#context.show();
     this.#animate();
@@ -173,11 +189,12 @@ class HighlightOverlay implements IBackDrop {
   }
 
   hide() {
+    this.#backdropColor = [0, 0, 0, 0];
+    this.#isVisible = false;
+
     this.#context.hide();
 
     this.#mouseHandler.unmount();
-
-    this.#backdropColor = [0, 0, 0, 0];
 
     cancelAnimationFrame(this.#animation);
   }
