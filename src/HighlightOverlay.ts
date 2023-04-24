@@ -1,7 +1,6 @@
 import { IBackDrop, IBackDropContext, IBackDropParams, IMouseHandler } from './interfaces/interfaces';
 import MouseHandler from './MouseHandler';
 import BackDropContext from './BackDropContext';
-import { isVisible } from './utils/isVisible';
 import { CloseTypes } from './interfaces/enums';
 
 // TODO add params validation
@@ -19,7 +18,7 @@ const defaultOptions: Partial<IBackDropParams> = {
 class HighlightOverlay implements IBackDrop {
   #context: IBackDropContext;
   #elementsBounds: DOMRect[];
-  #elements: NodeList;
+  #elements: NodeList | Element[];
   #params: IBackDropParams;
   #cursor: { x: number; y: number };
   #mouseHandler: IMouseHandler;
@@ -139,15 +138,13 @@ class HighlightOverlay implements IBackDrop {
       const element = this.#elements[i] as Element;
       const rect = element.getBoundingClientRect();
 
-      if (isVisible(element, rect)) {
-        this.#elementsBounds.push({
-          ...rect,
-          x: rect.x - this.#params.offset,
-          y: rect.y - this.#params.offset,
-          width: rect.width + this.#params.offset * 2,
-          height: rect.height + this.#params.offset * 2,
-        });
-      }
+      this.#elementsBounds.push({
+        ...rect,
+        x: rect.x - this.#params.offset,
+        y: rect.y - this.#params.offset,
+        width: rect.width + this.#params.offset * 2,
+        height: rect.height + this.#params.offset * 2,
+      });
     }
   }
 
@@ -177,7 +174,7 @@ class HighlightOverlay implements IBackDrop {
     this.#backdropIncrement = this.#calculateBackdropIncrement();
   }
 
-  show(elements: NodeList) {
+  show(elements: NodeList | Element[]) {
     this.#elements = elements;
     this.#elementsBounds = [];
 
