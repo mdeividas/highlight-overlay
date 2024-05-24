@@ -5,9 +5,12 @@ class BackDropContext implements IBackDropContext {
   #ctx: CanvasRenderingContext2D;
   #id: string;
   #updateView: () => void;
+  #delay: number;
+  #timeout: number;
 
-  constructor(updateView: () => void) {
+  constructor(updateView: () => void, delay = 0) {
     this.#id = `__dropback_${Date.now()}`;
+    this.#delay = delay;
     this.#updateView = updateView;
   }
 
@@ -21,9 +24,13 @@ class BackDropContext implements IBackDropContext {
   }
 
   #onResize() {
-    this.#updateCanvasDimensions();
+    window.clearTimeout(this.#timeout);
 
-    this.#updateView();
+    this.#timeout = window.setTimeout(() => {
+      this.#updateCanvasDimensions();
+
+      this.#updateView();
+    }, this.#delay);
   }
 
   show() {

@@ -13,6 +13,7 @@ const defaultOptions: Partial<IBackDropParams> = {
     enabled: false,
     size: 15,
   },
+  resizeDebounce: 300, // ms
 };
 
 class HighlightOverlay implements IBackDrop {
@@ -157,7 +158,7 @@ class HighlightOverlay implements IBackDrop {
   }
 
   constructor(params?: IBackDropParams) {
-    this.#context = new BackDropContext(this.#onResize.bind(this));
+    this.#context = new BackDropContext(this.#onResize.bind(this), params.resizeDebounce);
     this.#params = { ...defaultOptions, ...params, cursor: { ...defaultOptions.cursor, ...params?.cursor } };
     this.#elementsBounds = [];
     this.#cursor = { x: 0, y: 0 };

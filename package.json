@@ -1,6 +1,6 @@
 {
   "name": "highlight-overlay-js",
-  "version": "0.1.19",
+  "version": "0.2.0",
   "description": "",
   "main": "lib/index.js",
   "type": "module",
@@ -26,5 +26,7 @@
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^5.0.4"
   },
-  "files": ["lib/**/*"]
+  "files": [
+    "lib/**/*"
+  ]
 }
