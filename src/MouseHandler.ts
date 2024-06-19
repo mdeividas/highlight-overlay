@@ -22,12 +22,13 @@ class MouseHandler implements IMouseHandler {
       window.addEventListener('mousemove', this.#handleMouse.bind(this));
     }
 
-    window.addEventListener('click', this.#params.onClick);
+    window.addEventListener('mousedown', this.#params.onClick);
+    window.addEventListener('keydown', this.#params.onClick);
   }
 
   unmount() {
     window.removeEventListener('mousemove', this.#handleMouse.bind(this));
-    window.removeEventListener('click', this.#params.onClick);
+    window.removeEventListener('keydown', this.#params.onClick);
   }
 }
 
