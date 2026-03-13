@@ -14,6 +14,7 @@ const defaultOptions: Partial<IBackDropParams> = {
     size: 15,
   },
   resizeDebounce: 300, // ms
+  borderRadius: 0,
 };
 
 class HighlightOverlay implements IBackDrop {
@@ -73,7 +74,9 @@ class HighlightOverlay implements IBackDrop {
     ctx.fillStyle = 'black';
 
     this.#elementsBounds.forEach((element) => {
-      ctx.fillRect(element.x, element.y, element.width, element.height);
+      ctx.beginPath();
+      ctx.roundRect(element.x, element.y, element.width, element.height, this.#params.borderRadius);
+      ctx.fill();
     });
 
     ctx.stroke();

@@ -32,6 +32,7 @@ export interface IBackDropParams {
     size?: number;
   };
   resizeDebounce?: number;
+  borderRadius?: number;
 }
 
 export interface IBackDropOptions {
