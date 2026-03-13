@@ -34,6 +34,15 @@ class BackDropContext implements IBackDropContext {
   }
 
   show() {
+    const existing = document.getElementById(this.#id) as HTMLCanvasElement;
+
+    if (existing) {
+      this.#canvas = existing;
+      this.#ctx = this.#canvas.getContext('2d');
+      this.#updateCanvasDimensions();
+      return;
+    }
+
     this.#canvas = document.createElement('canvas');
     this.#canvas.id = this.#id;
     this.#canvas.style.position = 'absolute';
@@ -47,6 +56,10 @@ class BackDropContext implements IBackDropContext {
     document.body.append(this.#canvas);
 
     window.addEventListener('resize', this.#onResize.bind(this));
+  }
+
+  isUpdate() {
+    return !!document.getElementById(this.#id);
   }
 
   hide() {

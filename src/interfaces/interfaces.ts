@@ -5,6 +5,7 @@ export interface IBackDropContext {
   getWidth(): number;
   getHeight(): number;
   show(): void;
+  isUpdate(): boolean;
   hide(): void;
 }
 
