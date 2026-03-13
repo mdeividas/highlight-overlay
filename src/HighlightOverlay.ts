@@ -179,7 +179,6 @@ class HighlightOverlay implements IBackDrop {
   }
 
   show(elements: NodeList | Element[]) {
-    console.log('__DEBUG', 'show');
     this.#elements = elements;
     this.#elementsBounds = [];
 
