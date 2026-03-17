@@ -144,8 +144,8 @@ class HighlightOverlay implements IBackDrop {
 
       this.#elementsBounds.push({
         ...rect,
-        x: rect.x - this.#params.offset,
-        y: rect.y - this.#params.offset,
+        x: rect.x + window.scrollX - this.#params.offset,
+        y: rect.y + window.scrollY - this.#params.offset,
         width: rect.width + this.#params.offset * 2,
         height: rect.height + this.#params.offset * 2,
       });
@@ -182,11 +182,11 @@ class HighlightOverlay implements IBackDrop {
     this.#elements = elements;
     this.#elementsBounds = [];
 
-    this.#calculateBounds();
-
     const isUpdate = this.#context.isUpdate();
 
     this.#context.show();
+
+    this.#calculateBounds();
 
     if (isUpdate) {
       this.#draw();
